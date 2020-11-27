@@ -7,17 +7,23 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
+import com.db.StringUtil;
+import com.bean.Admin;
 import com.bean.UserType;
+import com.dao.AdminDao;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class EditPasswordFrame extends JInternalFrame {
 
@@ -77,8 +83,13 @@ public class EditPasswordFrame extends JInternalFrame {
 		
 		confirmPasswordTextField = new JTextField();
 		confirmPasswordTextField.setColumns(10);
-		
+		//修改密码
 		JButton submitButton = new JButton("\u786E\u8BA4\u4FEE\u6539");
+		submitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				submitEdit(e);
+			}
+		});
 		submitButton.setFont(new Font("微软雅黑", Font.PLAIN, 14));
 		submitButton.setIcon(new ImageIcon(EditPasswordFrame.class.getResource("/img/\u786E\u8BA4.png")));
 		
@@ -87,7 +98,7 @@ public class EditPasswordFrame extends JInternalFrame {
 		label_3.setFont(new Font("微软雅黑", Font.PLAIN, 14));
 		
 		currentUserLabel = new JLabel("New label");
-		currentUserLabel.setEnabled(false);
+		//currentUserLabel.setEnabled(false);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -138,7 +149,44 @@ public class EditPasswordFrame extends JInternalFrame {
 					.addContainerGap(46, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
+		if("系统管理员".equals(MainFrame.userType.getName())) {
+			Admin admin=(Admin)MainFrame.userObject;
+			currentUserLabel.setText("【系统管理员】"+admin.getAdmin_name());
+		}
 		
+	}
+	private void submitEdit(ActionEvent e) {
+		// TODO Auto-generated method stub
+		String oldPassword = oldPasswordTextField.getText().toString();
+		String newPassword = newPasswordTextField.getText().toString();
+		String conformPassword = confirmPasswordTextField.getText().toString();
+		if(StringUtil.isEmpty(oldPassword)){
+			JOptionPane.showMessageDialog(this, "请填写旧密码");
+			return;
+		}
+		if(StringUtil.isEmpty(newPassword)){
+			JOptionPane.showMessageDialog(this, "请填写新密码");
+			return;
+		}
+		if(StringUtil.isEmpty(conformPassword)){
+			JOptionPane.showMessageDialog(this, "请确认新密码");
+			return;
+		}
+		if(!newPassword.equals(conformPassword)){
+			JOptionPane.showMessageDialog(this, "两次密码输入不一致");
+			return;
+		}
+		if("系统管理员".equals(MainFrame.userType.getName())){
+			AdminDao adminDao = new AdminDao();
+			Admin adminTmp = new Admin();
+			Admin admin = (Admin)MainFrame.userObject;
+			adminTmp.setAdmin_name(admin.getAdmin_name());
+			adminTmp.setId(admin.getId());
+			adminTmp.setAdmin_password(oldPassword);
+			JOptionPane.showMessageDialog(this, adminDao.editPassword(adminTmp, newPassword));
+			adminDao.closeDao();
+			return;
+		}
 	}
 
 }

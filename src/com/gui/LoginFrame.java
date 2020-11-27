@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
 import com.bean.Admin;
@@ -33,7 +34,7 @@ public class LoginFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField userNameTextField;
-	private JTextField passwordTextField;
+	private JPasswordField passwordTextField;
 	private JComboBox userTypeComboBox;
 
 	/**
@@ -79,7 +80,7 @@ public class LoginFrame extends JFrame {
 		label_2.setIcon(new ImageIcon(LoginFrame.class.getResource("/img/\u5BC6\u7801.png")));
 		label_2.setFont(new Font("微软雅黑", Font.PLAIN, 14));
 		
-		passwordTextField = new JTextField();
+		passwordTextField = new JPasswordField();
 		passwordTextField.setColumns(10);
 		
 		JLabel label_3 = new JLabel("\u7C7B  \u578B \uFF1A");
@@ -193,7 +194,7 @@ public class LoginFrame extends JFrame {
 			}
 			JOptionPane.showMessageDialog(this, "欢迎【"+selectedItem.getName()+"】："+admin.getAdmin_name()+"登录本系统");
 			this.dispose();  //登录成功后隐藏登录界面
-			new MainFrame(selectedItem, admin).setVisible(true);
+			new MainFrame(selectedItem, admin).setVisible(true);  //传值 登录用户信息
 			//系统管理员登录
 		}else if("教师".equals(selectedItem.getName())) {
 			//教师登录
