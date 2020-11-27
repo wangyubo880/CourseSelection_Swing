@@ -9,8 +9,10 @@ import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
 import com.bean.Admin;
+import com.bean.Student;
 import com.bean.UserType;
 import com.dao.AdminDao;
+import com.dao.StudentDao;
 import com.db.StringUtil;
 
 import java.awt.GridBagLayout;
@@ -200,7 +202,22 @@ public class LoginFrame extends JFrame {
 			//教师登录
 		}else {
 			//学生登陆
+			Student student = null; 
+			StudentDao studentDao = new StudentDao();
+			Student studentTmp = new Student();
+			studentTmp.setStudent_name(userName);
+			studentTmp.setStudent_password(passWord);
+			student = studentDao.login(studentTmp);
+			studentDao.closeDao();
+			if(student == null){
+				JOptionPane.showMessageDialog(this, "用户名或密码错误！");
+				return;
+			}
+			JOptionPane.showMessageDialog(this, "欢迎【"+selectedItem.getName()+"】："+student.getStudent_name()+"登录本系统！");
+			this.dispose();
+			new MainFrame(selectedItem, student).setVisible(true);
 		}
+		
 	}
 
 	protected void resetValue(ActionEvent ae) {

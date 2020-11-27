@@ -8,9 +8,12 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import com.db.StringUtil;
+
 import com.bean.Admin;
+import com.bean.Student;
 import com.bean.UserType;
 import com.dao.AdminDao;
+import com.dao.StudentDao;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -152,6 +155,9 @@ public class EditPasswordFrame extends JInternalFrame {
 		if("系统管理员".equals(MainFrame.userType.getName())) {
 			Admin admin=(Admin)MainFrame.userObject;
 			currentUserLabel.setText("【系统管理员】"+admin.getAdmin_name());
+		}else if("学生".equals(MainFrame.userType.getName())){
+			Student student = (Student)MainFrame.userObject;
+			currentUserLabel.setText("【学生】" + student.getStudent_name());
 		}
 		
 	}
@@ -187,6 +193,28 @@ public class EditPasswordFrame extends JInternalFrame {
 			adminDao.closeDao();
 			return;
 		}
+		if("学生".equals(MainFrame.userType.getName())){
+			StudentDao studentDao = new StudentDao();
+			Student studentTmp = new Student();
+			Student student = (Student)MainFrame.userObject;
+			studentTmp.setStudent_name(student.getStudent_name());
+			studentTmp.setStudent_password(oldPassword);
+			studentTmp.setStudent_id(student.getStudent_id());
+			JOptionPane.showMessageDialog(this, studentDao.editPassword(studentTmp, newPassword));
+			studentDao.closeDao();
+			return;
+		}
+//		if("教师".equals(MainFrame.userType.getName())){
+//			TeacherDao teacherDao = new TeacherDao();
+//			Teacher teacherTmp = new Teacher();
+//			Teacher teacher = (Teacher)MainFrame.userObject;
+//			teacherTmp.setName(teacher.getName());
+//			teacherTmp.setPassword(oldPassword);
+//			teacherTmp.setId(teacher.getId());
+//			JOptionPane.showMessageDialog(this, teacherDao.editPassword(teacherTmp, newPassword));
+//			teacherDao.closeDao();
+//			return;
+//		}
 	}
 
 }

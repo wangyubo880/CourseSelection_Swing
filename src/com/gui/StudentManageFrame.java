@@ -20,6 +20,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.bean.Student;
 import com.dao.StudentDao;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class StudentManageFrame extends JInternalFrame {
@@ -70,6 +72,11 @@ public class StudentManageFrame extends JInternalFrame {
 		searchStudentNoTextField.setColumns(10);
 		
 		JButton searchButton = new JButton("");
+		searchButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				searchStudent(ae);
+			}
+		});
 		searchButton.setIcon(new ImageIcon(StudentManageFrame.class.getResource("/img/\u67E5\u8BE2.png")));
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -174,6 +181,16 @@ public class StudentManageFrame extends JInternalFrame {
 		setTable(new Student());
 
 	}
+	protected void searchStudent(ActionEvent ae) {
+		// TODO Auto-generated method stub
+		Student student = new Student();
+		student.setStudent_name(searchStudentNameTextField.getText().toString());
+		student.setStudent_number(searchStudentNoTextField.getText().toString());
+		//StudentClass sc = (StudentClass)searchStudentComboBox.getSelectedItem();
+		//student.setClassId(sc.getId());
+		setTable(student);
+	}
+
 	private void setTable(Student student){
 		if("Ñ§Éú".equals(MainFrame.userType.getName())){
 			Student s = (Student)MainFrame.userObject;
