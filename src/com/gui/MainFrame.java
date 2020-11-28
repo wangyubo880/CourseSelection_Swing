@@ -53,6 +53,7 @@ public class MainFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainFrame(UserType userType,Object userObject) {
+		
 		this.userType=userType;
 		this.userObject=userObject;
 		setTitle("\u9009\u8BFE\u7CFB\u7EDF\u4E3B\u754C\u9762");
@@ -151,6 +152,35 @@ public class MainFrame extends JFrame {
 		teacherListMenuItem.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u6559\u5E08\u5217\u8868.png")));
 		teacherListMenuItem.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
 		manageTeacherMenu.add(teacherListMenuItem);
+		
+		JMenu menu_2 = new JMenu("\u8BFE\u7A0B\u7BA1\u7406");
+		menu_2.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u8BFE\u7A0B\u7BA1\u7406.png")));
+		menu_2.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
+		menuBar.add(menu_2);
+		
+		JMenuItem addCourseMenuItem = new JMenuItem("\u6DFB\u52A0\u8BFE\u7A0B");
+		addCourseMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddCourseFrame addCourseFrm = new AddCourseFrame();
+				addCourseFrm.setVisible(true);
+				desktopPane.add(addCourseFrm);
+			}
+		});
+		addCourseMenuItem.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u6559\u5E08\u6DFB\u52A0.png")));
+		addCourseMenuItem.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
+		menu_2.add(addCourseMenuItem);
+		
+		JMenuItem courseListMenuItem = new JMenuItem("\u8BFE\u7A0B\u5217\u8868");
+		courseListMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CourseManageFrame manageCourseFrm = new CourseManageFrame();
+				manageCourseFrm.setVisible(true);
+				desktopPane.add(manageCourseFrm);
+			}
+		});
+		courseListMenuItem.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u8BFE\u7A0B\u5217\u8868.png")));
+		courseListMenuItem.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
+		menu_2.add(courseListMenuItem);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));

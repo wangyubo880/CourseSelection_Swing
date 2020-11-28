@@ -30,6 +30,10 @@ public class Teacher {
 	public void setTeacher_title(String teacher_title) {
 		this.teacher_title = teacher_title;
 	}
+	@Override
+	public String toString() {
+		return this.teacher_name;
+	}
 
 	
 }
