@@ -29,5 +29,9 @@ public class Student {
 	public void setStudent_number(String student_number) {
 		this.student_number = student_number;
 	}
+	@Override
+	public String toString() {
+		return this.student_name;
+	}
 	
 }

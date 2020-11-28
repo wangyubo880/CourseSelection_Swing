@@ -6,6 +6,8 @@ import javax.swing.JInternalFrame;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +25,15 @@ import com.bean.Course;
 import com.bean.Teacher;
 import com.dao.CourseDao;
 import com.dao.TeacherDao;
+import com.db.StringUtil;
 
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import javax.swing.JComboBox;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
 
 public class CourseManageFrame extends JInternalFrame {
 	private JTextField searchCourseNameTextField;
@@ -34,7 +41,6 @@ public class CourseManageFrame extends JInternalFrame {
 	private JTextField editCourseTextField;
 	private JTextField editCourseNumTextField;
 	private JComboBox editCourseTeacherComboBox;
-	private JComboBox searchTeacherComboBox;
 	private List<Teacher> teacherList = new ArrayList<Teacher>();
 
 	/**
@@ -69,19 +75,18 @@ public class CourseManageFrame extends JInternalFrame {
 		searchCourseNameTextField = new JTextField();
 		searchCourseNameTextField.setColumns(10);
 		
-		JLabel label_1 = new JLabel("\u6388\u8BFE\u8001\u5E08\uFF1A");
-		label_1.setIcon(new ImageIcon(CourseManageFrame.class.getResource("/img/\u6559\u5E08.png")));
-		label_1.setFont(new Font("微软雅黑", Font.PLAIN, 14));
-		
 		JButton searchButton = new JButton("\u67E5\u8BE2");
+		searchButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				searchCourse(e);
+			}
+		});
 		searchButton.setIcon(new ImageIcon(CourseManageFrame.class.getResource("/img/\u67E5\u8BE2.png")));
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "\u7F16\u8F91\u8BFE\u7A0B\u4FE1\u606F", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		
-		searchTeacherComboBox = new JComboBox();
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -92,11 +97,7 @@ public class CourseManageFrame extends JInternalFrame {
 							.addComponent(label)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(searchCourseNameTextField, GroupLayout.PREFERRED_SIZE, 172, GroupLayout.PREFERRED_SIZE)
-							.addGap(55)
-							.addComponent(label_1)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(searchTeacherComboBox, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
-							.addGap(60)
+							.addGap(366)
 							.addComponent(searchButton))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(91)
@@ -112,9 +113,7 @@ public class CourseManageFrame extends JInternalFrame {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label)
 						.addComponent(searchCourseNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(label_1)
-						.addComponent(searchButton)
-						.addComponent(searchTeacherComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(searchButton))
 					.addGap(37)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 252, GroupLayout.PREFERRED_SIZE)
 					.addGap(34)
@@ -143,10 +142,20 @@ public class CourseManageFrame extends JInternalFrame {
 		editCourseNumTextField.setColumns(10);
 		
 		JButton submitEditButton = new JButton("\u4FEE\u6539");
+		submitEditButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				editCourseSubmit(ae);
+			}
+		});
 		submitEditButton.setIcon(new ImageIcon(CourseManageFrame.class.getResource("/img/\u786E\u8BA4.png")));
 		submitEditButton.setFont(new Font("微软雅黑", Font.PLAIN, 14));
 		
 		JButton deleteCourseButton = new JButton("\u5220\u9664");
+		deleteCourseButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteCourse(e);
+			}
+		});
 		deleteCourseButton.setIcon(new ImageIcon(CourseManageFrame.class.getResource("/img/\u5220\u9664 .png")));
 		deleteCourseButton.setFont(new Font("微软雅黑", Font.PLAIN, 14));
 		GroupLayout gl_panel = new GroupLayout(panel);
@@ -193,6 +202,12 @@ public class CourseManageFrame extends JInternalFrame {
 		panel.setLayout(gl_panel);
 		
 		courseListTable = new JTable();
+		courseListTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				selectedCourse(me);
+			}
+		});
 		courseListTable.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -207,12 +222,98 @@ public class CourseManageFrame extends JInternalFrame {
 				return columnEditables[column];
 			}
 		});
+
 		scrollPane.setViewportView(courseListTable);
 		getContentPane().setLayout(groupLayout);
 		setTeacherCombox();
 		setCourseListTable(new Course());
 
 	}
+	protected void selectedCourse(MouseEvent me) {
+		// TODO Auto-generated method stub
+		int row = courseListTable.getSelectedRow();
+		String couseName = courseListTable.getValueAt(row, 1).toString();
+		int teacher_id = getTeacherIdByName(courseListTable.getValueAt(row, 2).toString());
+		int max_student_num = Integer.parseInt(courseListTable.getValueAt(row, 3).toString());
+		editCourseTextField.setText(couseName);
+		editCourseNumTextField.setText(max_student_num+"");
+		
+		for(int i=0;i<editCourseTeacherComboBox.getItemCount();i++){
+			Teacher t = (Teacher) editCourseTeacherComboBox.getItemAt(i);
+			if(t.getTeacher_id() == teacher_id){
+				editCourseTeacherComboBox.setSelectedIndex(i);
+				break;
+			}
+		}
+	}
+	protected void searchCourse(ActionEvent ae) {
+		// TODO Auto-generated method stub
+		String searchCourseName = searchCourseNameTextField.getText().toString();
+		//Teacher teacher = (Teacher) searchTeacherComboBox.getSelectedItem();
+		Course course = new Course();
+		course.setCourse_name(searchCourseName);
+		//course.setTeacher_id(teacher.getTeacher_id());
+		setCourseListTable(course);
+	}
+	protected void editCourseSubmit(ActionEvent ae) {
+		// TODO Auto-generated method stub
+		int row = courseListTable.getSelectedRow();
+		if(row == -1){
+			JOptionPane.showMessageDialog(this, "请选中要修改的数据！");
+			return;
+		}
+		int course_id = Integer.parseInt(courseListTable.getValueAt(row, 0).toString());
+		Teacher teacher = (Teacher) editCourseTeacherComboBox.getSelectedItem();
+		String courseName = editCourseTextField.getText().toString();
+		if(StringUtil.isEmpty(courseName)){
+			JOptionPane.showMessageDialog(this, "课程名称不能为空！");
+			return;
+		}
+		int max_student_num = 0;
+		try {
+			max_student_num = Integer.parseInt(editCourseNumTextField.getText().toString());
+		} catch (Exception e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(this, "学生人数请输入大于0的整数！");
+			return;
+		}
+		if(max_student_num <= 0){
+			JOptionPane.showMessageDialog(this, "学生人数请输入大于0的整数！");
+			return;
+		}
+		Course course = new Course();
+		course.setCourse_id(course_id);
+		course.setCourse_name(courseName);
+		course.setTeacher_id(teacher.getTeacher_id());
+		course.setMaxNumber(max_student_num);
+		CourseDao courseDao = new CourseDao();
+		if(courseDao.update(course)){
+			JOptionPane.showMessageDialog(this, "修改成功！");
+		}else{
+			JOptionPane.showMessageDialog(this, "修改失败！");
+		}
+		courseDao.closeDao();
+		setCourseListTable(new Course());
+	}
+
+	protected void deleteCourse(ActionEvent e) {
+		// TODO Auto-generated method stub
+		int row = courseListTable.getSelectedRow();
+		if(row == -1){
+			JOptionPane.showMessageDialog(this, "请选中要删除的数据！");
+			return;
+		}
+		int course_id = Integer.parseInt(courseListTable.getValueAt(row, 0).toString());
+		CourseDao courseDao = new CourseDao();
+		if(courseDao.delete(course_id)){
+			JOptionPane.showMessageDialog(this, "删除成功！");
+		}else{
+			JOptionPane.showMessageDialog(this, "删除失败！");
+		}
+		courseDao.closeDao();
+		setCourseListTable(new Course());
+	}
+
 	private void setCourseListTable(Course course){
 		CourseDao courseDao = new CourseDao();
 		List<Course> courseList = courseDao.getCourseList(course);
@@ -237,7 +338,7 @@ public class CourseManageFrame extends JInternalFrame {
 		teacherDao.closeDao();
 		for (Teacher teacher : teacherList) {
 			editCourseTeacherComboBox.addItem(teacher);
-			searchTeacherComboBox.addItem(teacher);
+			//searchTeacherComboBox.addItem(teacher);
 		}
 	}
 	private String getTeacherNameById(int teacher_id){

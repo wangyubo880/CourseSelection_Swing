@@ -32,6 +32,7 @@ public class MainFrame extends JFrame {
 	private JMenuItem studentAddMenuItem;
 	private JMenuItem teacherAddMenuItem;
 	private JMenu manageTeacherMenu;
+	private JMenu courseMenu;
 
 	/**
 	 * Launch the application.
@@ -181,6 +182,23 @@ public class MainFrame extends JFrame {
 		courseListMenuItem.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u8BFE\u7A0B\u5217\u8868.png")));
 		courseListMenuItem.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
 		menu_2.add(courseListMenuItem);
+		
+		courseMenu = new JMenu("\u9009\u8BFE\u7BA1\u7406");
+		courseMenu.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u9009\u8BFE\u7BA1\u7406.png")));
+		courseMenu.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
+		menuBar.add(courseMenu);
+		//Ñ¡¿ÎÑ¡¿Î
+		JMenuItem StudentSelectCourseMenuItem = new JMenuItem("\u9009\u8BFE");
+		StudentSelectCourseMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StudentCourseFrame manageSelectedCourseFrm = new StudentCourseFrame();
+				manageSelectedCourseFrm.setVisible(true);
+				desktopPane.add(manageSelectedCourseFrm);
+			}
+		});
+		StudentSelectCourseMenuItem.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u9009\u62E9.png")));
+		StudentSelectCourseMenuItem.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
+		courseMenu.add(StudentSelectCourseMenuItem);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
