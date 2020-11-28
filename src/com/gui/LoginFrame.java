@@ -10,9 +10,11 @@ import javax.swing.border.EmptyBorder;
 
 import com.bean.Admin;
 import com.bean.Student;
+import com.bean.Teacher;
 import com.bean.UserType;
 import com.dao.AdminDao;
 import com.dao.StudentDao;
+import com.dao.TeacherDao;
 import com.db.StringUtil;
 
 import java.awt.GridBagLayout;
@@ -200,6 +202,20 @@ public class LoginFrame extends JFrame {
 			//系统管理员登录
 		}else if("教师".equals(selectedItem.getName())) {
 			//教师登录
+			Teacher teacher = null;
+			TeacherDao teacherDao = new TeacherDao();
+			Teacher teacherTmp = new Teacher();
+			teacherTmp.setTeacher_name(userName);
+			teacherTmp.setTeacher_password(passWord);
+			teacher = teacherDao.login(teacherTmp);
+			teacherDao.closeDao();
+			if(teacher == null){
+				JOptionPane.showMessageDialog(this, "用户名或密码错误！");
+				return;
+			}
+			JOptionPane.showMessageDialog(this, "欢迎【"+selectedItem.getName()+"】："+teacher.getTeacher_name()+"登录本系统！");
+			this.dispose();
+			new MainFrame(selectedItem, teacher).setVisible(true);
 		}else {
 			//学生登陆
 			Student student = null; 

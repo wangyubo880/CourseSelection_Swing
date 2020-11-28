@@ -30,7 +30,8 @@ public class MainFrame extends JFrame {
 	public static Object userObject;
 	private JDesktopPane desktopPane;
 	private JMenuItem studentAddMenuItem;
-
+	private JMenuItem teacherAddMenuItem;
+	private JMenu manageTeacherMenu;
 
 	/**
 	 * Launch the application.
@@ -110,17 +111,46 @@ public class MainFrame extends JFrame {
 		studentAddMenuItem.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u5B66\u751F\u6DFB\u52A0.png")));
 		menu_1.add(studentAddMenuItem);
 		
-		JMenuItem menuItem_3 = new JMenuItem("\u5B66\u751F\u5217\u8868");
-		menuItem_3.addActionListener(new ActionListener() {
+		JMenuItem studentListMenuItem = new JMenuItem("\u5B66\u751F\u5217\u8868");
+		studentListMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				StudentManageFrames studentManageFrame=new StudentManageFrames();
 				studentManageFrame.setVisible(true);
 				desktopPane.add(studentManageFrame);
 			}
 		});
-		menuItem_3.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
-		menuItem_3.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u5B66\u751F\u5217\u8868.png")));
-		menu_1.add(menuItem_3);
+		studentListMenuItem.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
+		studentListMenuItem.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u5B66\u751F\u5217\u8868.png")));
+		menu_1.add(studentListMenuItem);
+		
+		manageTeacherMenu = new JMenu("\u6559\u5E08\u7BA1\u7406");
+		manageTeacherMenu.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u6559\u5E08.png")));
+		manageTeacherMenu.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
+		menuBar.add(manageTeacherMenu);
+		
+		teacherAddMenuItem = new JMenuItem("\u6559\u5E08\u6DFB\u52A0");
+		teacherAddMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddTeacherFrame addTeacherFrm = new AddTeacherFrame();
+				addTeacherFrm.setVisible(true);
+				desktopPane.add(addTeacherFrm);
+			}
+		});
+		teacherAddMenuItem.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u6559\u5E08\u6DFB\u52A0.png")));
+		teacherAddMenuItem.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
+		manageTeacherMenu.add(teacherAddMenuItem);
+		
+		JMenuItem teacherListMenuItem = new JMenuItem("\u6559\u5E08\u5217\u8868");
+		teacherListMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TeacherManageFrame manageTeacherFrm = new TeacherManageFrame();
+				manageTeacherFrm.setVisible(true);
+				desktopPane.add(manageTeacherFrm);
+			}
+		});
+		teacherListMenuItem.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u6559\u5E08\u5217\u8868.png")));
+		teacherListMenuItem.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
+		manageTeacherMenu.add(teacherListMenuItem);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -130,6 +160,7 @@ public class MainFrame extends JFrame {
 		desktopPane.setBackground(SystemColor.control);
 		contentPane.add(desktopPane, BorderLayout.CENTER);
 		setLocationRelativeTo(null);
+		setAuthority();
 	}
 
 	protected void editPassword(ActionEvent ae) {
@@ -139,5 +170,13 @@ public class MainFrame extends JFrame {
 		editPasswordFrm.setVisible(true);
 		desktopPane.add(editPasswordFrm);
 	}
-
+	private void setAuthority(){
+		if("Ñ§Éú".equals(userType.getName())){
+			studentAddMenuItem.setEnabled(false);
+			manageTeacherMenu.setEnabled(false);
+		}
+		if("½ÌÊ¦".equals(userType.getName())){
+			teacherAddMenuItem.setEnabled(false);
+		}
+	}
 }

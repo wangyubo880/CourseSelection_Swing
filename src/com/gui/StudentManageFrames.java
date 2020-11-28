@@ -36,6 +36,7 @@ public class StudentManageFrames extends JInternalFrame {
 	private JTable studentListTable;
 	private JTextField editStudentNameTextField;
 	private JTextField editStudentPasswordTextField;
+	private JButton deleteStudentButton;
 	
 
 	/**
@@ -110,7 +111,7 @@ public class StudentManageFrames extends JInternalFrame {
 		submitEditButton.setIcon(new ImageIcon(StudentManageFrames.class.getResource("/img/\u786E\u8BA4.png")));
 		submitEditButton.setFont(new Font("微软雅黑", Font.PLAIN, 14));
 		
-		JButton deleteStudentButton = new JButton("\u5220\u9664\u5B66\u751F");
+		deleteStudentButton = new JButton("\u5220\u9664\u5B66\u751F");
 		deleteStudentButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				deleteStudent(ae);
@@ -201,6 +202,7 @@ public class StudentManageFrames extends JInternalFrame {
 		scrollPane.setViewportView(studentListTable);
 		getContentPane().setLayout(groupLayout);
 		setTable(new Student());
+		setAuthority();
 
 	}
 	protected void submitEditMsg(ActionEvent ae) {
@@ -272,12 +274,13 @@ public class StudentManageFrames extends JInternalFrame {
 		//StudentClass sc = (StudentClass)searchStudentComboBox.getSelectedItem();
 		//student.setClassId(sc.getId());
 		setTable(student);
+		
 	}
 
 	private void setTable(Student student){
 		if("学生".equals(MainFrame.userType.getName())){
 			Student s = (Student)MainFrame.userObject;
-			student.setStudent_name(s.getStudent_name());
+			student.setStudent_name(s.getStudent_name());  //学生只能查询到本人信息
 		}
 		DefaultTableModel dft = (DefaultTableModel) studentListTable.getModel();
 		dft.setRowCount(0);
@@ -293,5 +296,17 @@ public class StudentManageFrames extends JInternalFrame {
 			dft.addRow(v);
 		}
 		studentDao.closeDao();
+	}
+	private void setAuthority(){
+		if("学生".equals(MainFrame.userType.getName())){
+			Student s = (Student)MainFrame.userObject;
+			searchStudentNameTextField.setText(s.getStudent_name());
+			System.out.println(s.getStudent_name());
+			searchStudentNameTextField.setEnabled(false);
+			searchStudentNoTextField.setText(s.getStudent_number());
+			System.out.println(s.getStudent_number());
+			searchStudentNoTextField.setEnabled(false);
+			deleteStudentButton.setEnabled(false);
+			}
 	}
 }

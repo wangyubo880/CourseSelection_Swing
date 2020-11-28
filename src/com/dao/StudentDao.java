@@ -135,6 +135,7 @@ public class StudentDao extends BaseDao {
 				studentRst.setStudent_id(executeQuery.getInt("student_id"));
 				studentRst.setStudent_name(executeQuery.getString("student_name"));
 				studentRst.setStudent_password(executeQuery.getString("student_password"));
+				studentRst.setStudent_number(executeQuery.getString("student_number"));  //+
 				
 			}
 		} catch (SQLException e) {
