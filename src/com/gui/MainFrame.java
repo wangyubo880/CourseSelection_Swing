@@ -33,6 +33,7 @@ public class MainFrame extends JFrame {
 	private JMenuItem teacherAddMenuItem;
 	private JMenu manageTeacherMenu;
 	private JMenu courseMenu;
+	private JMenu courseMenu2;
 
 	/**
 	 * Launch the application.
@@ -154,10 +155,10 @@ public class MainFrame extends JFrame {
 		teacherListMenuItem.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
 		manageTeacherMenu.add(teacherListMenuItem);
 		
-		JMenu menu_2 = new JMenu("\u8BFE\u7A0B\u7BA1\u7406");
-		menu_2.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u8BFE\u7A0B\u7BA1\u7406.png")));
-		menu_2.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
-		menuBar.add(menu_2);
+		courseMenu2 = new JMenu("\u8BFE\u7A0B\u7BA1\u7406");
+		courseMenu2.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u8BFE\u7A0B\u7BA1\u7406.png")));
+		courseMenu2.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
+		menuBar.add(courseMenu2);
 		
 		JMenuItem addCourseMenuItem = new JMenuItem("\u6DFB\u52A0\u8BFE\u7A0B");
 		addCourseMenuItem.addActionListener(new ActionListener() {
@@ -169,7 +170,7 @@ public class MainFrame extends JFrame {
 		});
 		addCourseMenuItem.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u6559\u5E08\u6DFB\u52A0.png")));
 		addCourseMenuItem.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
-		menu_2.add(addCourseMenuItem);
+		courseMenu2.add(addCourseMenuItem);
 		
 		JMenuItem courseListMenuItem = new JMenuItem("\u8BFE\u7A0B\u5217\u8868");
 		courseListMenuItem.addActionListener(new ActionListener() {
@@ -181,7 +182,7 @@ public class MainFrame extends JFrame {
 		});
 		courseListMenuItem.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u8BFE\u7A0B\u5217\u8868.png")));
 		courseListMenuItem.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 14));
-		menu_2.add(courseListMenuItem);
+		courseMenu2.add(courseListMenuItem);
 		
 		courseMenu = new JMenu("\u9009\u8BFE\u7BA1\u7406");
 		courseMenu.setIcon(new ImageIcon(MainFrame.class.getResource("/img/\u9009\u8BFE\u7BA1\u7406.png")));
@@ -222,6 +223,7 @@ public class MainFrame extends JFrame {
 		if("Ñ§Éú".equals(userType.getName())){
 			studentAddMenuItem.setEnabled(false);
 			manageTeacherMenu.setEnabled(false);
+			courseMenu2.setEnabled(false);
 		}
 		if("½ÌÊ¦".equals(userType.getName())){
 			teacherAddMenuItem.setEnabled(false);

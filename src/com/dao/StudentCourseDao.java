@@ -43,7 +43,7 @@ public class StudentCourseDao extends BaseDao {
 		if(selectedCourse.getStudent_id() != 0){
 			sqlString.append(" and student_id = "+selectedCourse.getStudent_id());
 		}
-		if(selectedCourse.getCourse_id() != null){
+		if(selectedCourse.getCourse_id() != 0){
 			sqlString.append(" and course_id ="+selectedCourse.getCourse_id());
 		}
 		try {

@@ -1,13 +1,13 @@
 package com.bean;
 
 public class Admin{
-	private Integer id;
+	private int id;
 	private String admin_name;
 	private String admin_password;
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getAdmin_name() {
@@ -22,5 +22,6 @@ public class Admin{
 	public void setAdmin_password(String admin_password) {
 		this.admin_password = admin_password;
 	}
+	
 	
 }

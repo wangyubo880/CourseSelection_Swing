@@ -325,6 +325,7 @@ public class StudentCourseFrame extends JInternalFrame {
 		courseDao.closeDao();
 		scDao.closeDao();
 		initTable();
+		
 	}
 
 	protected void selectedCourse(MouseEvent me) {

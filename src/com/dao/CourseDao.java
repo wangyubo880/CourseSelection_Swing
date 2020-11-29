@@ -66,7 +66,7 @@ public class CourseDao extends BaseDao {
 //		System.out.println(course.getCourse_name());
 //		System.out.println(course.getTeacher_id());  //²âÊÔ
 		//if(!StringUtil.isEmpty(course.getTeacher_id())){
-		if(course.getTeacher_id() != null){   //ÅÐ¶Ï½ÇÉ«
+		if(course.getTeacher_id() != 0){   //ÅÐ¶Ï½ÇÉ«
 			sqlString.append(" and teacher_id ="+course.getTeacher_id());
 		}
 		
